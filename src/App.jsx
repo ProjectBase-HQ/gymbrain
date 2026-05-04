@@ -47,16 +47,27 @@ const EXTRA_EXERCISES = [
   { id: "row_erg", name: "Rowing Ergometer", sets: 1, reps: "15 min", rest: "—", equipment: ["machines"], muscle: "Full Body Cardio", muscleGroup: "cardio", type: "Cardio", difficulty: 2, tip: "Drive with legs first. 60% legs, 20% back, 20% arms.", cue: "Legs, hips, arms", equipmentLabel: "Rowing Machine" },
   { id: "skip", name: "Jump Rope", sets: 5, reps: "2 min", rest: "30s", equipment: ["bodyweight"], muscle: "Cardio + Calves", muscleGroup: "cardio", type: "Cardio", difficulty: 2, tip: "Wrists spin the rope, not arms. Stay light on feet.", cue: "Stay light", equipmentLabel: "Jump Rope" },
   { id: "hiit", name: "HIIT Sprints", sets: 8, reps: "20s on/10s off", rest: "—", equipment: ["bodyweight"], muscle: "Cardio (Tabata)", muscleGroup: "cardio", type: "Cardio", difficulty: 4, tip: "True max effort — can't speak = right intensity.", cue: "Max every round", equipmentLabel: "Treadmill / Outdoor" },
+  { id: "stair", name: "StairMaster", sets: 1, reps: "20 min", rest: "—", equipment: ["machines"], muscle: "Cardio + Glutes", muscleGroup: "cardio", type: "Cardio", difficulty: 2, tip: "Keep hands off rails for full glute activation. Drive through heels.", cue: "Upright posture", equipmentLabel: "StairMaster" },
+  { id: "elliptical", name: "Elliptical Trainer", sets: 1, reps: "25 min", rest: "—", equipment: ["machines"], muscle: "Full Body Cardio", muscleGroup: "cardio", type: "Cardio", difficulty: 1, tip: "Vary resistance and incline every 5 min. Drive with glutes.", cue: "Push through heels", equipmentLabel: "Elliptical" },
+  { id: "assault", name: "Assault Bike", sets: 6, reps: "30s on/30s off", rest: "—", equipment: ["machines"], muscle: "Full Body Cardio", muscleGroup: "cardio", type: "Cardio", difficulty: 4, tip: "Push arms and legs simultaneously. True full-body effort.", cue: "Push and pull", equipmentLabel: "Assault Bike" },
+  { id: "ski", name: "Ski Erg", sets: 1, reps: "10 min", rest: "—", equipment: ["machines"], muscle: "Upper Body Cardio", muscleGroup: "cardio", type: "Cardio", difficulty: 3, tip: "Hinge at hips and pull down explosively from overhead.", cue: "Hips back, arms pull", equipmentLabel: "Ski Erg" },
   { id: "mbc", name: "Medicine Ball Slams", sets: 4, reps: "12", rest: "45s", equipment: ["machines"], muscle: "Core + Power", muscleGroup: "core", type: "Power", difficulty: 3, tip: "Full overhead extension, explosive slam.", cue: "Full extension", equipmentLabel: "Medicine Ball" },
   { id: "bxjmp", name: "Box Jump", sets: 4, reps: "8", rest: "60s", equipment: ["bodyweight"], muscle: "Quads + Power", muscleGroup: "legs", type: "Power", difficulty: 3, tip: "Land softly with bent knees. Step down — don't jump down.", cue: "Soft landing", equipmentLabel: "Plyo Box" },
   { id: "stretch", name: "Full Body Stretch", sets: 1, reps: "15 min", rest: "—", equipment: ["bodyweight"], muscle: "Recovery", muscleGroup: "recovery", type: "Recovery", difficulty: 1, tip: "Hold each stretch 30–60s. Focus hips, chest, thoracic.", cue: "Breathe into the stretch", equipmentLabel: "None" },
   { id: "foam", name: "Foam Roll + Release", sets: 1, reps: "10 min", rest: "—", equipment: ["bodyweight"], muscle: "Recovery", muscleGroup: "recovery", type: "Recovery", difficulty: 1, tip: "10–15 slow rolls per muscle. Pause on sore spots.", cue: "Slow and deliberate", equipmentLabel: "Foam Roller" },
 ];
-const EXTRA_CATEGORIES = [
-  { id: "cardio", label: "Cardio", icon: "🏃" },
-  { id: "core", label: "Core Add-On", icon: "🔥" },
-  { id: "legs", label: "Leg Add-On", icon: "🦵" },
-  { id: "recovery", label: "Recovery / Stretch", icon: "🧘" },
+const ADD_EXERCISE_CATEGORIES = [
+  { id: "cardio", label: "Cardio", icon: "🏃", source: "extra" },
+  { id: "chest", label: "Chest", icon: "🫁", source: "main" },
+  { id: "back", label: "Back", icon: "🔙", source: "main" },
+  { id: "shoulders", label: "Shoulders", icon: "🎯", source: "main" },
+  { id: "biceps", label: "Biceps", icon: "💪", source: "main" },
+  { id: "triceps", label: "Triceps", icon: "💥", source: "main" },
+  { id: "legs", label: "Legs", icon: "🦵", source: "main" },
+  { id: "glutes", label: "Glutes", icon: "🍑", source: "main" },
+  { id: "core", label: "Core", icon: "🔥", source: "main" },
+  { id: "recovery", label: "Recovery", icon: "🧘", source: "extra" },
+  { id: "custom", label: "Custom Exercise", icon: "✏️", source: "custom" },
 ];
 
 const ALL_EXERCISES = {
@@ -139,6 +150,26 @@ const GROUP_TO_MUSCLES = {
   chest: ["chest"], shoulders: ["shoulders"], triceps: ["triceps"],
   back: ["back"], biceps: ["biceps"], legs: ["legs"], glutes: ["glutes"], core: ["core"],
 };
+
+const MUSCLE_CATEGORIES = [
+  { id: "compound", label: "Full / Compound", groups: ["full_body","upper_body","lower_body"] },
+  { id: "upper", label: "Upper Body", groups: ["chest","back","shoulders","biceps","triceps"] },
+  { id: "lower", label: "Lower Body", groups: ["legs","glutes"] },
+  { id: "core", label: "Core", groups: ["core"] },
+];
+
+const COOLDOWN_EXERCISES = [
+  { id: "cd_quad", name: "Standing Quad Stretch", duration: "30s / side", muscle: "Quads" },
+  { id: "cd_hip", name: "Hip Flexor Lunge Stretch", duration: "45s / side", muscle: "Hip Flexors" },
+  { id: "cd_ham", name: "Hamstring Forward Fold", duration: "30s / side", muscle: "Hamstrings" },
+  { id: "cd_glute", name: "Figure-4 Glute Stretch", duration: "45s / side", muscle: "Glutes" },
+  { id: "cd_chest", name: "Doorway Chest Opener", duration: "30s", muscle: "Chest & Shoulders" },
+  { id: "cd_lat", name: "Child's Pose + Lat Reach", duration: "60s", muscle: "Back & Lats" },
+  { id: "cd_shoulder", name: "Cross-Body Shoulder Stretch", duration: "30s / side", muscle: "Shoulders" },
+  { id: "cd_calf", name: "Wall Calf Stretch", duration: "30s / side", muscle: "Calves" },
+  { id: "cd_cat", name: "Cat-Cow Spinal Mobility", duration: "10 reps", muscle: "Spine" },
+  { id: "cd_neck", name: "Neck Side Stretch", duration: "20s / side", muscle: "Neck" },
+];
 
 const getExercisesForMuscles = (muscleIds, equipment, duration) => {
   const allEq = equipment || [];
@@ -410,15 +441,84 @@ function HomeScreen({ user, onWorkout, onHistory, onEditProfile, onSwitchUser })
   );
 }
 
+// ── ADD EXERCISE PANEL (shared between builder + active workout) ──
+function AddExercisePanel({ currentExercises, onAdd, onClose }) {
+  const [category, setCategory] = useState(null);
+  const [customForm, setCustomForm] = useState({ name: "", sets: "3", reps: "10–12", rest: "60s" });
+  const currentIds = new Set(currentExercises.map(e => e.id));
+  const cat = ADD_EXERCISE_CATEGORIES.find(c => c.id === category);
+
+  const getList = () => {
+    if (!cat) return [];
+    if (cat.source === "main") return (ALL_EXERCISES[cat.id] || []).filter(e => !currentIds.has(e.id));
+    if (cat.source === "extra") return EXTRA_EXERCISES.filter(e => e.muscleGroup === cat.id && !currentIds.has(e.id));
+    return [];
+  };
+
+  const submitCustom = () => {
+    if (!customForm.name.trim()) return;
+    onAdd({ id: "custom_" + Date.now(), name: customForm.name.trim(), sets: parseInt(customForm.sets) || 3, reps: customForm.reps || "10–12", rest: customForm.rest || "60s", equipment: [], muscle: "Custom", muscleGroup: "custom", type: "Custom", difficulty: 2, tip: "", cue: "", equipmentLabel: "—" });
+  };
+
+  const list = getList();
+  return (
+    <div style={{ background: "#141414", border: "1px solid #1E1E1E", borderRadius: 16, padding: "16px", marginBottom: 14 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
+        <div style={{ fontSize: 13, color: "#888", fontWeight: 600 }}>{category ? (cat?.label || "Add exercise") : "Add an exercise"}</div>
+        <button onClick={onClose} style={{ background: "none", border: "none", color: "#555", cursor: "pointer", fontSize: 16 }}>✕</button>
+      </div>
+      {!category ? (
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+          {ADD_EXERCISE_CATEGORIES.map(c => <Chip key={c.id} label={c.label} icon={c.icon} selected={false} onClick={() => setCategory(c.id)} small />)}
+        </div>
+      ) : cat?.source === "custom" ? (
+        <div>
+          <button onClick={() => setCategory(null)} style={{ ...backBtnStyle, padding: "0 0 12px", fontSize: 12 }}>← Back</button>
+          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            <input placeholder="Exercise name *" value={customForm.name} onChange={e => setCustomForm(f => ({...f, name: e.target.value}))} style={{ ...inputStyle, padding: "10px 14px", fontSize: 13 }} />
+            <div style={{ display: "flex", gap: 8 }}>
+              <input placeholder="Sets" type="number" min="1" max="10" value={customForm.sets} onChange={e => setCustomForm(f => ({...f, sets: e.target.value}))} style={{ ...inputStyle, padding: "10px 14px", fontSize: 13, flex: 1 }} />
+              <input placeholder="Reps / time" value={customForm.reps} onChange={e => setCustomForm(f => ({...f, reps: e.target.value}))} style={{ ...inputStyle, padding: "10px 14px", fontSize: 13, flex: 1 }} />
+              <input placeholder="Rest" value={customForm.rest} onChange={e => setCustomForm(f => ({...f, rest: e.target.value}))} style={{ ...inputStyle, padding: "10px 14px", fontSize: 13, flex: 1 }} />
+            </div>
+            <button onClick={submitCustom} disabled={!customForm.name.trim()} style={{ ...btnStyle, width: "100%", opacity: customForm.name.trim() ? 1 : 0.4 }}>Add Custom Exercise ✓</button>
+          </div>
+        </div>
+      ) : (
+        <div>
+          <button onClick={() => setCategory(null)} style={{ ...backBtnStyle, padding: "0 0 12px", fontSize: 12 }}>← Back</button>
+          {list.length === 0
+            ? <div style={{ fontSize: 12, color: "#444", padding: "8px 0" }}>No more exercises available in this category.</div>
+            : list.map(ex => {
+              const mg = MUSCLE_GROUPS.find(m => m.id === (cat.source === "main" ? cat.id : ex.muscleGroup));
+              return (
+                <button key={ex.id} onClick={() => onAdd({ ...ex, muscleGroup: cat.source === "main" ? cat.id : ex.muscleGroup })} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", background: "#0F0F0F", border: "1px solid #222", borderRadius: 10, padding: "12px 14px", color: "#F0F0F0", cursor: "pointer", marginBottom: 8, textAlign: "left" }}
+                  onMouseEnter={e => e.currentTarget.style.borderColor = "#FF6B35"}
+                  onMouseLeave={e => e.currentTarget.style.borderColor = "#222"}>
+                  <div>
+                    <div style={{ fontSize: 13, fontWeight: 500 }}>{ex.name}</div>
+                    <div style={{ fontSize: 11, color: "#555", marginTop: 2 }}>{ex.sets}×{ex.reps} · {ex.type}{mg ? ` · ${mg.icon} ${mg.label}` : ""}</div>
+                  </div>
+                  <span style={{ color: "#FF6B35" }}>+</span>
+                </button>
+              );
+            })
+          }
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ── WORKOUT BUILDER ──
 function WorkoutBuilderScreen({ user, onBack, onStartWorkout }) {
-  const [step, setStep] = useState("muscles");
+  const [step, setStep] = useState("setup");
   const [selectedGroups, setSelectedGroups] = useState([]);
   const [sessionEquipment, setSessionEquipment] = useState([]);
+  const [sessionDuration, setSessionDuration] = useState(user.duration);
   const [exercises, setExercises] = useState([]);
   const [replacing, setReplacing] = useState(null);
   const [showAddExtra, setShowAddExtra] = useState(false);
-  const [extraCategory, setExtraCategory] = useState(null);
   const [editingSetRep, setEditingSetRep] = useState(null);
   const [editSets, setEditSets] = useState("");
   const [editReps, setEditReps] = useState("");
@@ -430,12 +530,17 @@ function WorkoutBuilderScreen({ user, onBack, onStartWorkout }) {
 
   const buildWorkout = () => {
     const muscleIds = [...new Set(selectedGroups.flatMap(g => GROUP_TO_MUSCLES[g] || [g]))];
-    setExercises(getExercisesForMuscles(muscleIds, sessionEquipment, user.duration));
+    setExercises(getExercisesForMuscles(muscleIds, sessionEquipment, sessionDuration));
     setStep("plan");
   };
 
   const removeExercise = (idx) => { setExercises(prev => prev.filter((_, i) => i !== idx)); if (editingSetRep === idx) setEditingSetRep(null); };
-  const replaceWith = (idx, newEx) => { setExercises(prev => prev.map((e, i) => i === idx ? { ...newEx, muscleGroup: e.muscleGroup } : e)); setReplacing(null); };
+  const moveExercise = (idx, dir) => {
+    const next = idx + dir;
+    if (next < 0 || next >= exercises.length) return;
+    setExercises(prev => { const a = [...prev]; [a[idx], a[next]] = [a[next], a[idx]]; return a; });
+  };
+  const replaceWith = (idx, newEx) => { setExercises(prev => prev.map((e, i) => i === idx ? { ...newEx, muscleGroup: newEx.muscleGroup || e.muscleGroup } : e)); setReplacing(null); };
   const getAlternatives = (ex) => {
     const currentIds = new Set(exercises.map(e => e.id));
     return (ALL_EXERCISES[ex.muscleGroup] || []).filter(e => e.id !== ex.id && !currentIds.has(e.id) && (sessionEquipment.length === 0 || e.equipment.some(eq => sessionEquipment.includes(eq) || eq === "bodyweight")));
@@ -446,45 +551,57 @@ function WorkoutBuilderScreen({ user, onBack, onStartWorkout }) {
     if (!isNaN(newSets) && newSets > 0 && editReps.trim()) setExercises(prev => prev.map((e, i) => i === idx ? { ...e, sets: newSets, reps: editReps.trim() } : e));
     setEditingSetRep(null);
   };
-  const addExtraExercise = (ex) => { setExercises(prev => [...prev, ex]); setShowAddExtra(false); setExtraCategory(null); };
   const DIFF_DOTS = (n) => "●".repeat(n) + "○".repeat(4 - n);
 
-  if (step === "muscles") return (
+  if (step === "setup") return (
     <div style={{ maxWidth: 440, margin: "0 auto", padding: "36px 20px 80px" }}>
       <button onClick={onBack} style={backBtnStyle}>← Back</button>
-      <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 38, letterSpacing: 1, marginBottom: 6 }}>WHAT ARE WE<br /><span style={{ color: "#FF6B35" }}>WORKING ON?</span></div>
-      <div style={{ fontSize: 13, color: "#666", marginBottom: 28 }}>Pick one or more muscle groups for today.</div>
-      <div style={{ display: "flex", flexWrap: "wrap", gap: 9, marginBottom: 32 }}>
-        {MUSCLE_GROUPS.map(m => <Chip key={m.id} label={m.label} icon={m.icon} selected={selectedGroups.includes(m.id)} onClick={() => toggleGroup(m.id)} color={m.color} small />)}
-      </div>
-      <button onClick={() => setStep("equipment")} disabled={selectedGroups.length === 0} style={{ ...btnStyle, width: "100%", opacity: selectedGroups.length > 0 ? 1 : 0.4 }}>Next: Equipment →</button>
-    </div>
-  );
+      <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 38, letterSpacing: 1, marginBottom: 28 }}>TODAY'S<br /><span style={{ color: "#FF6B35" }}>SESSION</span></div>
 
-  if (step === "equipment") return (
-    <div style={{ maxWidth: 440, margin: "0 auto", padding: "36px 20px 80px" }}>
-      <button onClick={() => setStep("muscles")} style={backBtnStyle}>← Back</button>
-      <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 38, letterSpacing: 1, marginBottom: 6 }}>EQUIPMENT<br /><span style={{ color: "#FF6B35" }}>TODAY?</span></div>
-      <div style={{ fontSize: 13, color: "#666", marginBottom: 24 }}>What's available at your gym right now?</div>
-      <button onClick={handleAllEquipment} style={{ width: "100%", padding: "14px 18px", borderRadius: 14, marginBottom: 16, border: `2px solid ${allSelected ? "#FF6B35" : "#333"}`, background: allSelected ? "#FF6B3518" : "#141414", color: allSelected ? "#FF6B35" : "#888", fontFamily: "'DM Sans', sans-serif", fontSize: 14, fontWeight: 600, cursor: "pointer", transition: "all 0.15s", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
-        <span>{allSelected ? "✓" : "🏟️"}</span> All of the Above
+      {/* Section 1: Muscle Groups */}
+      <div style={{ fontSize: 11, color: "#FF6B35", textTransform: "uppercase", letterSpacing: 2, marginBottom: 14 }}>What are we training?</div>
+      {MUSCLE_CATEGORIES.map(cat => (
+        <div key={cat.id} style={{ marginBottom: 18 }}>
+          <div style={{ fontSize: 10, color: "#444", textTransform: "uppercase", letterSpacing: 2, marginBottom: 8 }}>{cat.label}</div>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+            {cat.groups.map(gid => {
+              const m = MUSCLE_GROUPS.find(x => x.id === gid);
+              return m ? <Chip key={m.id} label={m.label} icon={m.icon} selected={selectedGroups.includes(m.id)} onClick={() => toggleGroup(m.id)} color={m.color} small /> : null;
+            })}
+          </div>
+        </div>
+      ))}
+
+      {/* Section 2: Equipment */}
+      <div style={{ width: "100%", height: 1, background: "#1A1A1A", margin: "24px 0 20px" }} />
+      <div style={{ fontSize: 11, color: "#FF6B35", textTransform: "uppercase", letterSpacing: 2, marginBottom: 14 }}>Equipment available?</div>
+      <button onClick={handleAllEquipment} style={{ width: "100%", padding: "12px 16px", borderRadius: 12, marginBottom: 12, border: `2px solid ${allSelected ? "#FF6B35" : "#333"}`, background: allSelected ? "#FF6B3518" : "#141414", color: allSelected ? "#FF6B35" : "#888", fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 600, cursor: "pointer", transition: "all 0.15s", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
+        <span>{allSelected ? "✓" : "🏟️"}</span> Full Gym (All Equipment)
       </button>
-      <div style={{ display: "flex", flexWrap: "wrap", gap: 9, marginBottom: 32 }}>
-        {EQUIPMENT_LIST.map(e => <Chip key={e.id} label={e.label} icon={e.icon} selected={sessionEquipment.includes(e.id)} onClick={() => toggleEquipment(e.id)} />)}
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 8 }}>
+        {EQUIPMENT_LIST.map(e => <Chip key={e.id} label={e.label} icon={e.icon} selected={sessionEquipment.includes(e.id)} onClick={() => toggleEquipment(e.id)} small />)}
       </div>
-      <button onClick={buildWorkout} disabled={sessionEquipment.length === 0} style={{ ...btnStyle, width: "100%", opacity: sessionEquipment.length > 0 ? 1 : 0.4 }}>Build My Workout ⚡</button>
+
+      {/* Section 3: Duration */}
+      <div style={{ width: "100%", height: 1, background: "#1A1A1A", margin: "24px 0 20px" }} />
+      <div style={{ fontSize: 11, color: "#FF6B35", textTransform: "uppercase", letterSpacing: 2, marginBottom: 14 }}>How much time today?</div>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 32 }}>
+        {DURATION_OPTIONS.map(d => <Chip key={d.id} label={d.label} selected={sessionDuration === d.id} onClick={() => setSessionDuration(d.id)} small />)}
+      </div>
+
+      <button onClick={buildWorkout} disabled={selectedGroups.length === 0 || sessionEquipment.length === 0} style={{ ...btnStyle, width: "100%", opacity: (selectedGroups.length > 0 && sessionEquipment.length > 0) ? 1 : 0.4 }}>Build My Workout ⚡</button>
     </div>
   );
 
   const selectedGroupsMeta = selectedGroups.map(g => MUSCLE_GROUPS.find(m => m.id === g)).filter(Boolean);
   return (
     <div style={{ maxWidth: 440, margin: "0 auto", padding: "36px 20px 80px" }}>
-      <button onClick={() => setStep("equipment")} style={backBtnStyle}>← Back</button>
+      <button onClick={() => setStep("setup")} style={backBtnStyle}>← Back</button>
       <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 38, letterSpacing: 1, marginBottom: 6 }}>TODAY'S<br /><span style={{ color: "#FF6B35" }}>SESSION</span></div>
       <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 20 }}>
         {selectedGroupsMeta.map(m => <Tag key={m.id} label={`${m.icon} ${m.label}`} color={m.color} />)}
         <Tag label={`${exercises.length} exercises`} color="#555" />
-        <Tag label={`~${user.duration} min`} color="#555" />
+        <Tag label={`~${sessionDuration} min`} color="#555" />
       </div>
       <Divider label="Your workout — tap sets×reps to edit" />
       {exercises.map((ex, idx) => {
@@ -531,13 +648,15 @@ function WorkoutBuilderScreen({ user, onBack, onStartWorkout }) {
               <div style={{ fontSize: 12, color: "#555", borderLeft: `2px solid ${mg?.color || "#FF6B35"}`, paddingLeft: 10, marginBottom: 12, lineHeight: 1.5 }}>💡 {ex.tip}</div>
               <div style={{ fontSize: 11, color: "#666", background: "#0F0F0F", borderRadius: 8, padding: "7px 12px", marginBottom: 10 }}>🎯 <span style={{ color: "#888" }}>{ex.cue}</span></div>
               <div style={{ display: "flex", gap: 8 }}>
-                <button onClick={() => setReplacing(replacing === idx ? null : idx)} style={{ ...smallBtnStyle, flex: 1, color: replacing === idx ? "#FF6B35" : "#666" }}>{replacing === idx ? "✕ Cancel" : "⇄ Replace"}</button>
+                <button onClick={() => setReplacing(replacing === idx ? null : idx)} style={{ ...smallBtnStyle, flex: 1, color: replacing === idx ? "#FF6B35" : "#666" }}>{replacing === idx ? "✕ Cancel" : "⇄ Swap"}</button>
+                <button onClick={() => moveExercise(idx, -1)} disabled={idx === 0} style={{ ...smallBtnStyle, padding: "10px 12px", opacity: idx === 0 ? 0.3 : 1 }}>↑</button>
+                <button onClick={() => moveExercise(idx, 1)} disabled={idx === exercises.length - 1} style={{ ...smallBtnStyle, padding: "10px 12px", opacity: idx === exercises.length - 1 ? 0.3 : 1 }}>↓</button>
                 <button onClick={() => removeExercise(idx)} style={{ ...smallBtnStyle, color: "#E63946" }}>× Remove</button>
               </div>
             </div>
             {replacing === idx && (
               <div style={{ background: "#0F0F0F", borderTop: "1px solid #1A1A1A", padding: "14px" }}>
-                <div style={{ fontSize: 11, color: "#555", textTransform: "uppercase", letterSpacing: 2, marginBottom: 10 }}>Replace with a different {mg?.label} exercise:</div>
+                <div style={{ fontSize: 11, color: "#555", textTransform: "uppercase", letterSpacing: 2, marginBottom: 10 }}>Swap with a different {mg?.label || ""} exercise:</div>
                 {alts.length === 0 ? <div style={{ fontSize: 12, color: "#444", padding: "8px 0" }}>No other options for current equipment.</div>
                   : alts.map(alt => (
                   <button key={alt.id} onClick={() => replaceWith(idx, alt)} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", background: "#141414", border: "1px solid #222", borderRadius: 10, padding: "12px 14px", color: "#F0F0F0", cursor: "pointer", marginBottom: 8, textAlign: "left" }}
@@ -555,37 +674,13 @@ function WorkoutBuilderScreen({ user, onBack, onStartWorkout }) {
           </div>
         );
       })}
-      {!showAddExtra ? (
-        <button onClick={() => setShowAddExtra(true)} style={{ ...smallBtnStyle, width: "100%", marginBottom: 14, borderStyle: "dashed", color: "#555" }}>+ Add Exercise</button>
-      ) : (
-        <div style={{ background: "#141414", border: "1px solid #1E1E1E", borderRadius: 16, padding: "16px", marginBottom: 14 }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
-            <div style={{ fontSize: 13, color: "#888", fontWeight: 600 }}>Add an exercise</div>
-            <button onClick={() => { setShowAddExtra(false); setExtraCategory(null); }} style={{ background: "none", border: "none", color: "#555", cursor: "pointer", fontSize: 16 }}>✕</button>
-          </div>
-          {!extraCategory ? (
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-              {EXTRA_CATEGORIES.map(cat => <Chip key={cat.id} label={cat.label} icon={cat.icon} selected={false} onClick={() => setExtraCategory(cat.id)} small />)}
-            </div>
-          ) : (
-            <div>
-              <button onClick={() => setExtraCategory(null)} style={{ ...backBtnStyle, padding: "0 0 12px", fontSize: 12 }}>← Back</button>
-              {EXTRA_EXERCISES.filter(e => e.muscleGroup === extraCategory).map(ex => (
-                <button key={ex.id} onClick={() => addExtraExercise(ex)} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", background: "#0F0F0F", border: "1px solid #222", borderRadius: 10, padding: "12px 14px", color: "#F0F0F0", cursor: "pointer", marginBottom: 8, textAlign: "left" }}>
-                  <div>
-                    <div style={{ fontSize: 13, fontWeight: 500 }}>{ex.name}</div>
-                    <div style={{ fontSize: 11, color: "#555", marginTop: 2 }}>{ex.sets}×{ex.reps} · {ex.type} · 🛠 {ex.equipmentLabel}</div>
-                  </div>
-                  <span style={{ color: "#FF6B35" }}>+</span>
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
+      {showAddExtra
+        ? <AddExercisePanel currentExercises={exercises} onAdd={ex => { setExercises(prev => [...prev, ex]); setShowAddExtra(false); }} onClose={() => setShowAddExtra(false)} />
+        : <button onClick={() => setShowAddExtra(true)} style={{ ...smallBtnStyle, width: "100%", marginBottom: 14, borderStyle: "dashed", color: "#555" }}>+ Add Exercise</button>
+      }
       <div style={{ display: "flex", gap: 10 }}>
         <button onClick={buildWorkout} style={{ ...smallBtnStyle, flex: "0 0 auto" }}>↻ Rebuild</button>
-        <button onClick={() => onStartWorkout(exercises, selectedGroups)} style={{ ...btnStyle, flex: 1 }}>Start Session →</button>
+        <button onClick={() => onStartWorkout(exercises, selectedGroups, sessionDuration)} style={{ ...btnStyle, flex: 1 }}>Start Session →</button>
       </div>
     </div>
   );
@@ -651,17 +746,28 @@ function parseRestSeconds(restStr) {
 }
 
 // ── ACTIVE WORKOUT ──
-function ActiveWorkoutScreen({ user, exercises, groups, onFinish, onBack }) {
+function ActiveWorkoutScreen({ user, exercises: initialExercises, groups, sessionDuration, onFinish, onBack }) {
+  const [activeExercises, setActiveExercises] = useState(initialExercises);
   const [completedSets, setCompletedSets] = useState({});
   const [weights, setWeights] = useState({});
   const [activeWeightInput, setActiveWeightInput] = useState(null);
   const [restTimer, setRestTimer] = useState(null);
   const [startTime] = useState(Date.now());
+  const [replacingActive, setReplacingActive] = useState(null);
+  const [showAddInActive, setShowAddInActive] = useState(false);
+  const [editingActiveSetRep, setEditingActiveSetRep] = useState(null);
+  const [activeEditSets, setActiveEditSets] = useState("");
+  const [activeEditReps, setActiveEditReps] = useState("");
 
-  const totalSets = exercises.reduce((a, e) => a + (typeof e.sets === "number" ? e.sets : 1), 0);
+  const totalSets = activeExercises.reduce((a, e) => a + (typeof e.sets === "number" ? e.sets : 1), 0);
   const doneSets = Object.values(completedSets).filter(Boolean).length;
   const progress = totalSets > 0 ? Math.round((doneSets / totalSets) * 100) : 0;
   const isComplete = progress === 100;
+
+  const currentExIdx = activeExercises.findIndex((ex, ei) => {
+    const setCount = typeof ex.sets === "number" ? ex.sets : 1;
+    return !Array.from({ length: setCount }, (_, si) => completedSets[`${ei}-${si}`]).every(Boolean);
+  });
 
   const toggleSet = (ei, si, ex) => {
     const key = `${ei}-${si}`;
@@ -679,16 +785,43 @@ function ActiveWorkoutScreen({ user, exercises, groups, onFinish, onBack }) {
 
   const setWeight = (key, val) => setWeights(p => ({ ...p, [key]: val }));
 
+  const replaceActiveExercise = (idx, newEx) => {
+    setActiveExercises(prev => prev.map((e, i) => i === idx ? { ...newEx } : e));
+    setCompletedSets(prev => {
+      const next = { ...prev };
+      Object.keys(next).forEach(k => { if (k.startsWith(`${idx}-`)) delete next[k]; });
+      return next;
+    });
+    setWeights(prev => {
+      const next = { ...prev };
+      Object.keys(next).forEach(k => { if (k.startsWith(`${idx}-`)) delete next[k]; });
+      return next;
+    });
+    setReplacingActive(null);
+  };
+
+  const startActiveEditSetRep = (idx) => { const ex = activeExercises[idx]; setActiveEditSets(String(ex.sets)); setActiveEditReps(String(ex.reps)); setEditingActiveSetRep(idx); };
+  const saveActiveSetRep = (idx) => {
+    const newSets = parseInt(activeEditSets);
+    if (!isNaN(newSets) && newSets > 0 && activeEditReps.trim()) setActiveExercises(prev => prev.map((e, i) => i === idx ? { ...e, sets: newSets, reps: activeEditReps.trim() } : e));
+    setEditingActiveSetRep(null);
+  };
+
+  const getActiveAlts = (ex, idx) => {
+    const currentIds = new Set(activeExercises.filter((_, i) => i !== idx).map(e => e.id));
+    return (ALL_EXERCISES[ex.muscleGroup] || []).filter(e => e.id !== ex.id && !currentIds.has(e.id));
+  };
+
   const handleFinish = () => {
     const elapsed = Math.round((Date.now() - startTime) / 60000);
     const groupLabels = groups.map(g => MUSCLE_GROUPS.find(m => m.id === g)?.label).filter(Boolean).join(" + ");
-    const exercise_details = exercises.map((ex, ei) => {
+    const exercise_details = activeExercises.map((ex, ei) => {
       const setCount = typeof ex.sets === "number" ? ex.sets : 1;
       const setsCompleted = Array.from({ length: setCount }, (_, si) => completedSets[`${ei}-${si}`]).filter(Boolean).length;
       const exWeights = Array.from({ length: setCount }, (_, si) => weights[`${ei}-${si}`] || "");
       return { name: ex.name, muscle: ex.muscle, muscleGroup: ex.muscleGroup, sets: setCount, reps: ex.reps, setsCompleted, weights: exWeights, equipmentLabel: ex.equipmentLabel };
     });
-    const entry = { id: Date.now(), date: today(), label: `${groupLabels} Day`, exercises: exercises.length, sets: doneSets, duration: elapsed, exercises_list: exercises.map(e => e.name), exercise_details };
+    const entry = { id: Date.now(), date: today(), label: `${groupLabels || "Custom"} Day`, exercises: activeExercises.length, sets: doneSets, duration: elapsed, exercises_list: activeExercises.map(e => e.name), exercise_details };
     const history = loadData(`history_${user.id}`, []);
     saveData(`history_${user.id}`, [...history, entry]);
     onFinish(entry);
@@ -730,45 +863,97 @@ function ActiveWorkoutScreen({ user, exercises, groups, onFinish, onBack }) {
         </div>
       )}
 
-      {exercises.map((ex, ei) => {
+      {activeExercises.map((ex, ei) => {
         const mg = MUSCLE_GROUPS.find(m => m.id === ex.muscleGroup);
         const setCount = typeof ex.sets === "number" ? ex.sets : 1;
         const allDone = Array.from({ length: setCount }, (_, si) => completedSets[`${ei}-${si}`]).every(Boolean);
+        const isCurrent = ei === currentExIdx && !isComplete;
+        const alts = getActiveAlts(ex, ei);
+        const isEditingThis = editingActiveSetRep === ei;
         return (
-          <div key={ei} style={{ background: "#141414", border: `1px solid ${allDone ? "#FF6B3544" : "#1E1E1E"}`, borderRadius: 16, padding: "18px", marginBottom: 12, opacity: allDone ? 0.6 : 1, transition: "all 0.3s" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 10 }}>
-              <div style={{ flex: 1 }}>
-                <div style={{ fontSize: 15, fontWeight: 600, color: allDone ? "#555" : "#F0F0F0", marginBottom: 5 }}>{ex.name}</div>
-                <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-                  {mg && <Tag label={`${mg.icon} ${mg.label}`} color={mg.color} />}
-                  <Tag label={`${ex.reps} reps`} color={mg?.color || "#FF6B35"} />
-                  <Tag label={`🛠 ${ex.equipmentLabel || ex.equipment?.[0] || ""}`} color="#444" />
-                </div>
+          <div key={ei} style={{ background: "#141414", border: `2px solid ${isCurrent ? (mg?.color || "#FF6B35") : allDone ? "#FF6B3522" : "#1E1E1E"}`, borderRadius: 16, marginBottom: 12, overflow: "hidden", opacity: allDone ? 0.55 : 1, transition: "all 0.3s" }}>
+            {isCurrent && (
+              <div style={{ background: mg?.color || "#FF6B35", padding: "5px 16px", display: "flex", alignItems: "center", gap: 6 }}>
+                <span style={{ fontSize: 10, color: "#000", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase" }}>▶ Up next</span>
               </div>
-              {allDone ? <span style={{ fontSize: 22, flexShrink: 0, marginLeft: 10 }}>✅</span>
-                : <div style={{ textAlign: "right", flexShrink: 0, marginLeft: 10 }}>
-                    <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 22, color: "#FF6B35" }}>{setCount} sets</div>
-                    <div style={{ fontSize: 10, color: "#555" }}>⏱ {ex.rest}</div>
+            )}
+            <div style={{ padding: "18px" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 10 }}>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontSize: 15, fontWeight: 600, color: allDone ? "#555" : "#F0F0F0", marginBottom: 5 }}>{ex.name}</div>
+                  <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                    {mg && <Tag label={`${mg.icon} ${mg.label}`} color={mg.color} />}
+                    <Tag label={`${ex.reps} reps`} color={mg?.color || "#FF6B35"} />
+                    <Tag label={`🛠 ${ex.equipmentLabel || ex.equipment?.[0] || "—"}`} color="#444" />
                   </div>
-              }
+                </div>
+                {allDone ? <span style={{ fontSize: 22, flexShrink: 0, marginLeft: 10 }}>✅</span>
+                  : (
+                    <div style={{ flexShrink: 0, marginLeft: 10 }}>
+                      {isEditingThis ? (
+                        <div style={{ display: "flex", flexDirection: "column", gap: 4, alignItems: "flex-end" }}>
+                          <div style={{ display: "flex", gap: 4, alignItems: "center" }}>
+                            <input value={activeEditSets} onChange={e => setActiveEditSets(e.target.value)} type="number" min="1" max="10" style={{ ...inputStyle, width: 50, padding: "4px 8px", fontSize: 12, textAlign: "center" }} />
+                            <span style={{ color: "#555", fontSize: 11 }}>×</span>
+                            <input value={activeEditReps} onChange={e => setActiveEditReps(e.target.value)} style={{ ...inputStyle, width: 68, padding: "4px 8px", fontSize: 12, textAlign: "center" }} />
+                          </div>
+                          <button onClick={() => saveActiveSetRep(ei)} style={{ ...smallBtnStyle, fontSize: 10, padding: "4px 10px", color: "#FF6B35", borderColor: "#FF6B35" }}>Save ✓</button>
+                        </div>
+                      ) : (
+                        <button onClick={() => startActiveEditSetRep(ei)} style={{ background: "#1A1A1A", border: "1px solid #2A2A2A", borderRadius: 10, padding: "8px 12px", cursor: "pointer", textAlign: "right" }}>
+                          <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 22, color: "#F0F0F0", lineHeight: 1 }}>{setCount} sets</div>
+                          <div style={{ fontSize: 9, color: "#555" }}>⏱ {ex.rest}</div>
+                        </button>
+                      )}
+                    </div>
+                  )
+                }
+              </div>
+              <div style={{ display: "flex", gap: 8, marginBottom: 10, flexWrap: "wrap" }}>
+                {Array.from({ length: setCount }, (_, si) => {
+                  const key = `${ei}-${si}`;
+                  const done = !!completedSets[key];
+                  const w = weights[key];
+                  const isTimingThis = restTimer?.key === key;
+                  return (
+                    <button key={si} onClick={() => toggleSet(ei, si, ex)} style={{ width: 50, height: 50, borderRadius: 12, border: `2px solid ${isTimingThis ? "#FF6B35" : done ? "#FF6B3566" : "#2A2A2A"}`, background: done ? (isTimingThis ? "#FF6B3522" : "#FF6B3511") : "#0F0F0F", color: done ? "#FF6B35" : "#555", fontSize: 10, fontWeight: 700, cursor: "pointer", transition: "all 0.15s", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 1, lineHeight: 1.2 }}>
+                      {done ? (<><span style={{ fontSize: 13 }}>✓</span>{w && <span style={{ fontSize: 8, color: "#FF6B35aa" }}>{w}kg</span>}</>) : <span style={{ fontSize: 12 }}>S{si + 1}</span>}
+                    </button>
+                  );
+                })}
+              </div>
+              <div style={{ fontSize: 12, color: "#555", lineHeight: 1.5, marginBottom: 10 }}>🎯 {ex.cue}</div>
+              {!allDone && (
+                <div style={{ display: "flex", gap: 8 }}>
+                  <button onClick={() => setReplacingActive(replacingActive === ei ? null : ei)} style={{ ...smallBtnStyle, fontSize: 11, padding: "7px 12px", color: replacingActive === ei ? "#FF6B35" : "#555" }}>{replacingActive === ei ? "✕ Cancel" : "⇄ Swap"}</button>
+                </div>
+              )}
             </div>
-            <div style={{ display: "flex", gap: 8, marginBottom: 10, flexWrap: "wrap" }}>
-              {Array.from({ length: setCount }, (_, si) => {
-                const key = `${ei}-${si}`;
-                const done = !!completedSets[key];
-                const w = weights[key];
-                const isTimingThis = restTimer?.key === key;
-                return (
-                  <button key={si} onClick={() => toggleSet(ei, si, ex)} style={{ width: 50, height: 50, borderRadius: 12, border: `2px solid ${isTimingThis ? "#FF6B35" : done ? "#FF6B3566" : "#2A2A2A"}`, background: done ? (isTimingThis ? "#FF6B3522" : "#FF6B3511") : "#0F0F0F", color: done ? "#FF6B35" : "#555", fontSize: 10, fontWeight: 700, cursor: "pointer", transition: "all 0.15s", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 1, lineHeight: 1.2 }}>
-                    {done ? (<><span style={{ fontSize: 13 }}>✓</span>{w && <span style={{ fontSize: 8, color: "#FF6B35aa" }}>{w}kg</span>}</>) : <span style={{ fontSize: 12 }}>S{si + 1}</span>}
-                  </button>
-                );
-              })}
-            </div>
-            <div style={{ fontSize: 12, color: "#555", lineHeight: 1.5 }}>🎯 {ex.cue}</div>
+            {replacingActive === ei && (
+              <div style={{ background: "#0F0F0F", borderTop: "1px solid #1A1A1A", padding: "14px" }}>
+                <div style={{ fontSize: 11, color: "#555", textTransform: "uppercase", letterSpacing: 2, marginBottom: 10 }}>Swap with:</div>
+                {alts.length === 0 ? <div style={{ fontSize: 12, color: "#444" }}>No alternatives found.</div>
+                  : alts.slice(0, 5).map(alt => (
+                    <button key={alt.id} onClick={() => replaceActiveExercise(ei, { ...alt, muscleGroup: ex.muscleGroup })} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", background: "#141414", border: "1px solid #222", borderRadius: 10, padding: "10px 14px", color: "#F0F0F0", cursor: "pointer", marginBottom: 8, textAlign: "left" }}
+                      onMouseEnter={e => e.currentTarget.style.borderColor = "#FF6B35"}
+                      onMouseLeave={e => e.currentTarget.style.borderColor = "#222"}>
+                      <div>
+                        <div style={{ fontSize: 13, fontWeight: 500 }}>{alt.name}</div>
+                        <div style={{ fontSize: 11, color: "#555", marginTop: 2 }}>{alt.sets}×{alt.reps} · 🛠 {alt.equipmentLabel || alt.equipment.join(", ")}</div>
+                      </div>
+                      <span style={{ color: "#FF6B35" }}>⇄</span>
+                    </button>
+                  ))}
+              </div>
+            )}
           </div>
         );
       })}
+
+      {showAddInActive
+        ? <AddExercisePanel currentExercises={activeExercises} onAdd={ex => { setActiveExercises(prev => [...prev, ex]); setShowAddInActive(false); }} onClose={() => setShowAddInActive(false)} />
+        : <button onClick={() => setShowAddInActive(true)} style={{ ...smallBtnStyle, width: "100%", marginBottom: 14, borderStyle: "dashed", color: "#555" }}>+ Add Exercise</button>
+      }
 
       {!isComplete && doneSets > 0 && (
         <button onClick={handleFinish} style={{ ...smallBtnStyle, width: "100%", marginTop: 8 }}>End Session Early & Log Progress</button>
@@ -946,6 +1131,35 @@ function FinishScreen({ entry, onHome, onViewLog }) {
   );
 }
 
+// ── COOLDOWN ──
+function CooldownScreen({ onDone, onSkip }) {
+  const [checked, setChecked] = useState({});
+  const toggle = (id) => setChecked(p => ({ ...p, [id]: !p[id] }));
+  const doneCount = Object.values(checked).filter(Boolean).length;
+  return (
+    <div style={{ maxWidth: 440, margin: "0 auto", padding: "48px 20px 80px" }}>
+      <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 38, letterSpacing: 1, marginBottom: 6 }}>COOL<span style={{ color: "#4ECDC4" }}>DOWN</span></div>
+      <div style={{ fontSize: 13, color: "#666", marginBottom: 28 }}>Take 5–10 minutes to stretch. Your future self will thank you.</div>
+      {COOLDOWN_EXERCISES.map(ex => (
+        <button key={ex.id} onClick={() => toggle(ex.id)} style={{ display: "flex", alignItems: "center", gap: 14, width: "100%", background: checked[ex.id] ? "#0A1A1A" : "#141414", border: `1px solid ${checked[ex.id] ? "#4ECDC4" : "#1E1E1E"}`, borderRadius: 14, padding: "14px 18px", marginBottom: 10, cursor: "pointer", textAlign: "left", transition: "all 0.15s" }}>
+          <div style={{ width: 24, height: 24, borderRadius: "50%", border: `2px solid ${checked[ex.id] ? "#4ECDC4" : "#333"}`, background: checked[ex.id] ? "#4ECDC4" : "none", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, fontSize: 12, color: "#0A0A0A", transition: "all 0.15s" }}>
+            {checked[ex.id] ? "✓" : ""}
+          </div>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize: 14, fontWeight: 500, color: checked[ex.id] ? "#4ECDC4" : "#F0F0F0", marginBottom: 2 }}>{ex.name}</div>
+            <div style={{ fontSize: 11, color: "#555" }}>{ex.duration} · {ex.muscle}</div>
+          </div>
+        </button>
+      ))}
+      <div style={{ fontSize: 12, color: "#555", textAlign: "center", margin: "20px 0 24px" }}>{doneCount} / {COOLDOWN_EXERCISES.length} stretches done</div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        <button onClick={onDone} style={{ ...btnStyle, width: "100%", background: "#4ECDC4", color: "#0A0A0A" }}>All Done — Finish 🎉</button>
+        <button onClick={onSkip} style={{ ...smallBtnStyle, width: "100%", color: "#555" }}>Skip Cooldown</button>
+      </div>
+    </div>
+  );
+}
+
 // ── STYLES ──
 const inputStyle = { width: "100%", background: "#111", border: "1px solid #222", borderRadius: 12, padding: "14px 16px", color: "#F0F0F0", fontSize: 15, fontFamily: "'DM Sans', sans-serif", outline: "none" };
 const btnStyle = { background: "#FF6B35", color: "#0A0A0A", border: "none", borderRadius: 14, padding: "16px 24px", cursor: "pointer", fontFamily: "'Bebas Neue', sans-serif", fontSize: 20, letterSpacing: 1.5, transition: "all 0.15s" };
@@ -960,6 +1174,7 @@ export default function GymBrain() {
   const [editingUser, setEditingUser] = useState(null);
   const [workoutExercises, setWorkoutExercises] = useState([]);
   const [workoutGroups, setWorkoutGroups] = useState([]);
+  const [workoutDuration, setWorkoutDuration] = useState(null);
   const [finishedEntry, setFinishedEntry] = useState(null);
 
   useEffect(() => {
@@ -1010,8 +1225,9 @@ export default function GymBrain() {
         {screen === "onboarding" && <OnboardingScreen onComplete={handleOnboardingComplete} existingUser={editingUser} />}
         {screen === "user_select" && <UserSelectScreen users={users} onSelect={u => { setActiveUser(u); setScreen("home"); }} onNew={() => { setEditingUser(null); setScreen("onboarding"); }} onRemove={handleRemoveUser} />}
         {screen === "home" && activeUser && <HomeScreen user={activeUser} onWorkout={() => setScreen("builder")} onHistory={() => setScreen("history")} onEditProfile={() => { setEditingUser(activeUser); setScreen("onboarding"); }} onSwitchUser={() => setScreen("user_select")} />}
-        {screen === "builder" && activeUser && <WorkoutBuilderScreen user={activeUser} onBack={() => setScreen("home")} onStartWorkout={(exs, groups) => { setWorkoutExercises(exs); setWorkoutGroups(groups); setScreen("active"); }} />}
-        {screen === "active" && activeUser && <ActiveWorkoutScreen user={activeUser} exercises={workoutExercises} groups={workoutGroups} onFinish={e => { setFinishedEntry(e); setScreen("finish"); }} onBack={() => setScreen("builder")} />}
+        {screen === "builder" && activeUser && <WorkoutBuilderScreen user={activeUser} onBack={() => setScreen("home")} onStartWorkout={(exs, groups, dur) => { setWorkoutExercises(exs); setWorkoutGroups(groups); setWorkoutDuration(dur); setScreen("active"); }} />}
+        {screen === "active" && activeUser && <ActiveWorkoutScreen user={activeUser} exercises={workoutExercises} groups={workoutGroups} sessionDuration={workoutDuration} onFinish={e => { setFinishedEntry(e); setScreen("cooldown"); }} onBack={() => setScreen("builder")} />}
+        {screen === "cooldown" && <CooldownScreen onDone={() => setScreen("finish")} onSkip={() => setScreen("finish")} />}
         {screen === "history" && activeUser && <HistoryScreen user={activeUser} onBack={() => setScreen("home")} />}
         {screen === "finish" && finishedEntry && <FinishScreen entry={finishedEntry} onHome={() => setScreen("home")} onViewLog={() => setScreen("history")} />}
       </div>
