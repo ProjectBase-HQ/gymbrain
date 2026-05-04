@@ -1314,8 +1314,15 @@ function FinishScreen({ entry, onHome, onViewLog }) {
 // ─────────────────────────────────────────
 // SPLASH SCREEN
 // ─────────────────────────────────────────
-function SplashScreen() {
-  const dur = "3.2s";
+function SplashScreen({ onContinue }) {
+  const [ready, setReady] = useState(false);
+
+  // Button fades in after copy animations have settled
+  useEffect(() => {
+    const t = setTimeout(() => setReady(true), 2000);
+    return () => clearTimeout(t);
+  }, []);
+
   return (
     <div style={{
       minHeight: "100vh", background: "#0A0A0A",
@@ -1324,68 +1331,75 @@ function SplashScreen() {
       padding: "0 32px", textAlign: "center",
     }}>
       {/* Logo */}
-      <div style={{ marginBottom: 48, animation: `splashLine1 ${dur} ease forwards` }}>
+      <div style={{ marginBottom: 52, animation: "splashLine1 2.4s ease forwards" }}>
         <div style={{
           fontFamily: "'Bebas Neue', sans-serif",
-          fontSize: 64, letterSpacing: 4, lineHeight: 1,
-          color: "#F0F0F0",
+          fontSize: 64, letterSpacing: 4, lineHeight: 1, color: "#F0F0F0",
         }}>
           GYM<span style={{ color: "#FF6B35" }}>BRAIN</span>
         </div>
-        {/* Underline accent */}
         <div style={{
           height: 3, background: "#FF6B35", borderRadius: 2, marginTop: 10,
-          animation: `splashBar ${dur} ease forwards`,
+          animation: "splashBar 2.4s ease forwards",
         }} />
       </div>
 
-      {/* Copy lines — staggered */}
-      <div style={{ display: "flex", flexDirection: "column", gap: 16, maxWidth: 300 }}>
+      {/* Copy lines — staggered in */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 20, maxWidth: 300 }}>
         <div style={{
           fontFamily: "'Bebas Neue', sans-serif",
           fontSize: 22, letterSpacing: 1.5, color: "#F0F0F0",
-          animation: `splashLine2 ${dur} ease forwards`,
+          animation: "splashLine2 2.4s ease forwards",
         }}>
           Built for people who show up.
         </div>
 
         <div style={{
-          fontSize: 15, color: "#888", lineHeight: 1.6,
+          fontSize: 15, color: "#888", lineHeight: 1.7,
           fontFamily: "'DM Sans', sans-serif", fontWeight: 300,
-          animation: `splashLine3 ${dur} ease forwards`,
+          animation: "splashLine3 2.4s ease forwards",
         }}>
           Your session. Your goals.<br />Zero planning required.
         </div>
 
         <div style={{
-          fontSize: 14, color: "#555", lineHeight: 1.6,
+          fontSize: 14, color: "#555", lineHeight: 1.7,
           fontFamily: "'DM Sans', sans-serif", fontWeight: 300,
-          animation: `splashLine4 ${dur} ease forwards`,
+          animation: "splashLine4 2.4s ease forwards",
         }}>
           The only thing left to think about is lifting.
         </div>
       </div>
 
-      {/* Loading cue */}
+      {/* CTA — fades in after copy has settled, user controls when to proceed */}
       <div style={{
-        marginTop: 64,
-        animation: `splashCta ${dur} ease forwards`,
+        marginTop: 60,
+        opacity: ready ? 1 : 0,
+        transform: ready ? "translateY(0)" : "translateY(14px)",
+        transition: "opacity 0.7s ease, transform 0.7s ease",
       }}>
-        <div style={{ display: "flex", gap: 6, justifyContent: "center" }}>
-          {[0, 1, 2].map(i => (
-            <div key={i} style={{
-              width: 6, height: 6, borderRadius: "50%",
-              background: "#FF6B35",
-              animation: `timerPulse 1.2s ease-in-out ${i * 0.2}s infinite`,
-            }} />
-          ))}
-        </div>
+        <button
+          onClick={onContinue}
+          style={{
+            background: "#FF6B35", color: "#0A0A0A",
+            border: "none", borderRadius: 14,
+            padding: "18px 52px",
+            fontFamily: "'Bebas Neue', sans-serif",
+            fontSize: 22, letterSpacing: 2,
+            cursor: "pointer",
+            transition: "transform 0.15s",
+          }}
+          onMouseEnter={e => e.currentTarget.style.transform = "scale(1.03)"}
+          onMouseLeave={e => e.currentTarget.style.transform = "scale(1)"}
+        >
+          Let's Get To Work →
+        </button>
         <div style={{
-          fontSize: 11, color: "#333", letterSpacing: 3,
-          textTransform: "uppercase", marginTop: 12,
+          fontSize: 11, color: "#2A2A2A", letterSpacing: 2,
+          textTransform: "uppercase", marginTop: 16,
           fontFamily: "'DM Sans', sans-serif",
         }}>
-          Let's get to work
+          Your gym. Your plan. Every time.
         </div>
       </div>
     </div>
@@ -1414,12 +1428,15 @@ export default function GymBrain() {
   const [finishedEntry, setFinishedEntry] = useState(null);
 
   useEffect(() => {
-  const saved = loadData("gymbrain_users", []);
-  setUsers(saved);
-  const next = saved.length > 0 ? "user_select" : "onboarding";
-  const timer = setTimeout(() => setScreen(next), 3400);
-  return () => clearTimeout(timer);
-}, []);
+    const saved = loadData("gymbrain_users", []);
+    setUsers(saved);
+    // Stay on splash — user taps the button to continue
+  }, []);
+
+  const handleSplashContinue = () => {
+    const saved = loadData("gymbrain_users", []);
+    setScreen(saved.length > 0 ? "user_select" : "onboarding");
+  };
 
   const handleOnboardingComplete = (form) => {
     if (form.id) {
@@ -1465,7 +1482,7 @@ export default function GymBrain() {
         @keyframes splashCta   { 0%,78% { opacity:0; } 92%,100% { opacity:0.5; } }
       `}</style>
       <div className="fade-up">
-        {screen === "loading" && <SplashScreen />}
+        {screen === "loading" && <SplashScreen onContinue={handleSplashContinue} />}
         {screen === "onboarding" && <OnboardingScreen onComplete={handleOnboardingComplete} existingUser={editingUser} />}
         {screen === "user_select" && <UserSelectScreen users={users} onSelect={u => { setActiveUser(u); setScreen("home"); }} onNew={() => { setEditingUser(null); setScreen("onboarding"); }} onRemove={handleRemoveUser} />}
         {screen === "home" && activeUser && <HomeScreen user={activeUser} onWorkout={() => setScreen("builder")} onHistory={() => setScreen("history")} onEditProfile={() => { setEditingUser(activeUser); setScreen("onboarding"); }} onSwitchUser={() => setScreen("user_select")} />}
