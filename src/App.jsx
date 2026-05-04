@@ -1468,6 +1468,7 @@ export default function GymBrain() {
     <div style={{ minHeight: "100vh", background: "#0A0A0A", color: "#F0F0F0", fontFamily: "'DM Sans', sans-serif" }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Bebas+Neue&display=swap');
+        html, body { margin: 0; padding: 0; background: #0A0A0A; }
         * { box-sizing: border-box; } button { outline: none; } input { outline: none; }
         input::placeholder { color: #444; } input:focus { border-color: #FF6B35 !important; }
         ::-webkit-scrollbar { width: 3px; } ::-webkit-scrollbar-thumb { background: #222; }
